@@ -30,7 +30,12 @@ function startGame(){
 }
 
 const turnClick = e =>{
-    turn (e.target.id, humanPlayer)
+
+    if(typeof originBoard[e.target.id] == 'number'){
+        turn (e.target.id, humanPlayer)
+        if(!checkTie()) turn(bestSpot(), aiPlayer)
+    }
+
 
 }
 
@@ -69,6 +74,11 @@ function gameOver(gameWon){
     }
 
     cells.forEach(item=>item.removeEventListener('click',turnClick,false))
+}
+
+
+function bestSpot(){
+    
 }
 
 startGame()
