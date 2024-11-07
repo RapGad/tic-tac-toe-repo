@@ -74,11 +74,39 @@ function gameOver(gameWon){
     }
 
     cells.forEach(item=>item.removeEventListener('click',turnClick,false))
+
+    declareWinner(gameWon.player == humanPlayer ? "You win" : "You loose")
 }
 
 
+function emptySquares(){
+    return originBoard.filter(s => typeof s == 'number')
+}
+
 function bestSpot(){
-    
+    return emptySquares()[0]
+
+}
+
+function declareWinner(whoWon){
+    popUp.style.display = "block"
+    document.querySelector(".endgame .text").innerText = whoWon
+}
+
+
+function checkTie(){
+    if(emptySquares().length == 0){
+        cells.forEach(item=>{
+            item.style.backgroundColor = 'green'
+            item.removeEventListener('click',turnClick,false)
+        })
+
+        declareWinner("Tie Game")
+        return true
+        
+    }
+
+    return false
 }
 
 startGame()
