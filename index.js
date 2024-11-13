@@ -84,8 +84,57 @@ function emptySquares(){
 }
 
 function bestSpot(){
-    return emptySquares()[0]
+    //return emptySquares()[0]
 
+    return minimax(originBoard,aiPlayer).index
+
+}
+
+function minimax(newBoard,player){
+    let availableSpots = emptySquares(newBoard)
+
+    if(checkWin(newBoard,player)) return {score: -10}
+    else if (checkWin(newBoard,aiPlayer)) return {score: 10}
+    else if (availableSpots.length === 0) return {score: 0}
+
+    let moves = []
+    for(let i = 0; i < availableSpots.length; i++){
+        let move = {}
+        move.index = newBoard[availableSpots[i]]
+        newBoard[availableSpots[i]] = player
+        if(player == aiPlayer){
+            let result = minimax(newBoard,humanPlayer)
+            move.score = result.score
+        }
+        else{
+            let result = minimax(newBoard,aiPlayer)
+            move.score = result.score
+        }
+
+        newBoard[availableSpots[i]] = move.index
+        moves.push(move)
+    }
+
+    let bestMove
+    if(player === aiPlayer){
+        let bestScore = -10000
+        for(let i = 0; i < moves.length; i++){
+            if(moves[i].score > bestScore){
+                bestScore = moves[i].score
+                bestMove = i
+            }
+        }
+    }else{
+        let bestScore = 10000
+        for(let i = 0; i < moves.length; i++){
+            if(moves[i].score < bestScore){
+                bestScore = moves[i].score
+                bestMove = i
+            }
+        }
+    }
+
+    return moves[bestMove]
 }
 
 function declareWinner(whoWon){
